@@ -6,8 +6,8 @@ COPY ./requirements.txt .
 
 RUN python3 -m venv venv
 
-RUN . venv/bin/activate pip install -r requirements.txt
+RUN . venv/bin/activate && pip install -r requirements.txt
 
 COPY . .
 
-CMD . venv/bin/activate python3 manage.py runserver 0.0.0.0:5000
+CMD python3 manage.py runserver 0.0.0.0:5000

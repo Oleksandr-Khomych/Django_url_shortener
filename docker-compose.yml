@@ -19,7 +19,7 @@ services:
   web:
     build: .
     container_name: web
-    command:  bash -c "sleep 5 . venv/bin/activate && python manage.py migrate && python manage.py runserver 0.0.0.0:5000"
+    command:  bash -c "sleep 4s; venv/bin/python3 manage.py migrate && venv/bin/python3 manage.py runserver 0.0.0.0:5000"
     ports:
       - 5000:5000
     networks:
