@@ -4,4 +4,3 @@ db.sqlite3
 .env
 db-data/
 other/
-authentication/

@@ -12,6 +12,7 @@ User = get_user_model()
 
 class RetrieveUpdateDestroyShortUrlTestCase(APITestCase):
     def setUp(self):
+        self.login_url = reverse('auth-login')
         self.password = "testPassword"
         self.super_user = User.objects.create_user("admin", "admin@example.com", self.password, is_superuser=True)
         self.test_user = User.objects.create_user("test", "test@example.com", self.password)
@@ -20,9 +21,12 @@ class RetrieveUpdateDestroyShortUrlTestCase(APITestCase):
         self.obj2 = ShortUrl.objects.create(full_url='https://www.google.com.ua/2/', url_hash='dsdfdu', creator=self.test_user)
 
     def test_delete(self):
-        self.client.login(username=self.test_user.username, password=self.password)
+        auth_response = self.client.post(self.login_url,
+                                    {'username': self.test_user.username, 'password': self.password},
+                                    format='json').json()
         response = self.client.delete(
             reverse("retrieve_update_destroy_short_url", kwargs={"pk": self.obj1.id}),
+            HTTP_AUTHORIZATION=f'Bearer {auth_response["access"]}',
         )
         data = response.json()
         self.assertEqual(data, {'detail': 'You do not have permission to perform this action.'})
@@ -30,15 +34,19 @@ class RetrieveUpdateDestroyShortUrlTestCase(APITestCase):
 
         response = self.client.delete(
             reverse("retrieve_update_destroy_short_url", kwargs={"pk": self.obj2.id}),
+            HTTP_AUTHORIZATION=f'Bearer {auth_response["access"]}',
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_update(self):
         full_url = "http://127.0.0.1:8000/"
-        self.client.login(username=self.test_user.username, password=self.password)
+        auth_response = self.client.post(self.login_url,
+                                    {'username': self.super_user.username, 'password': self.password},
+                                    format='json').json()
         response = self.client.put(
             reverse("retrieve_update_destroy_short_url", kwargs={"pk": self.obj2.id}),
-            data={"full_url": full_url}
+            data={"full_url": full_url},
+            HTTP_AUTHORIZATION=f'Bearer {auth_response["access"]}',
         )
         self.obj2 = ShortUrl.objects.get(full_url=full_url)
         self.assertEqual(self.obj2.url_hash, shortit(full_url))
@@ -48,7 +56,8 @@ class RetrieveUpdateDestroyShortUrlTestCase(APITestCase):
         full_url += 'test/'
         response = self.client.patch(
             reverse("retrieve_update_destroy_short_url", kwargs={"pk": self.obj2.id}),
-            data={"full_url": full_url}
+            data={"full_url": full_url},
+            HTTP_AUTHORIZATION=f'Bearer {auth_response["access"]}',
         )
         self.obj2 = ShortUrl.objects.get(full_url=full_url)
         self.assertEqual(self.obj2.url_hash, shortit(full_url))
