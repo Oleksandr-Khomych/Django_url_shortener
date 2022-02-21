@@ -1,5 +1,5 @@
 Django==4.0.2
 djangorestframework==3.13.1
-djangorestframework-simplejwt=5.0.0
+djangorestframework-simplejwt==5.0.0
 environs
 psycopg2-binary
