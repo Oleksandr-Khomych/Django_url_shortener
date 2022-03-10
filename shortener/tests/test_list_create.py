@@ -30,7 +30,6 @@ class ListCreateShortUrlTestCase(APITestCase):
             format="json")
         data = response.json()
         short_urls_count = ShortUrl.objects.count()
-        self.assertEqual(data["id"], 1)
         self.assertEqual(data["full_url"], self.test_full_url)
         self.assertEqual(data["url_hash"], shortit(self.test_full_url))
         self.assertEqual(data["redirect_count"], 0)

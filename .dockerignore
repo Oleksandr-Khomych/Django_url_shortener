@@ -1,4 +1,7 @@
 .idea/
 venv/
 db.sqlite3
-db-data/
+.database/
+README.md
+Dockerfile
+docker-compose.yml

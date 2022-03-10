@@ -2,5 +2,5 @@
 venv/
 db.sqlite3
 .env
-db-data/
+.database/
 other/
