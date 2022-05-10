@@ -4,3 +4,4 @@ djangorestframework-simplejwt==5.0.0
 psycopg2-binary
 python-dotenv
 gunicorn
+drf-spectacular

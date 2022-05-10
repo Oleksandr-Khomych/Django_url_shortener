@@ -58,3 +58,5 @@ exit
 ## 👤Test user auth:
 #### Username: test
 #### Password: test
+
+## 📁Open Swagger docs: http://127.0.0.1:8000/api/schema/swagger-ui/
